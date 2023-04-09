@@ -1,20 +1,11 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true,
-  extends: ["@cilotta/eslint-config"], // uses the config in `packages/config/eslint`
-  parser: "@typescript-eslint/parser",
+  extends: ['@cilotta/eslint-config'], // uses the config in `packages/config/eslint`
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: "latest",
+    ecmaVersion: 'latest',
     tsconfigRootDir: __dirname,
-    project: [
-      "./tsconfig.json",
-      "./apps/*/tsconfig.json",
-      "./packages/*/tsconfig.json",
-    ],
+    project: ['./tsconfig.json', './apps/*/tsconfig.json', './packages/*/tsconfig.json'],
   },
-  settings: {
-    next: {
-      rootDir: ["apps/nextjs"],
-    },
-  },
-};
+}

@@ -1,6 +1,3 @@
 packages:
   - apps/expo
-  - apps/docs
-  - apps/web
-  - packages/ui
   - packages/config/*
