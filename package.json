@@ -20,6 +20,7 @@
     "czg": "^1.6.1",
     "eslint": "latest",
     "prettier": "latest",
+    "prettier-plugin-tailwindcss": "^0.2.7",
     "turbo": "latest",
     "typescript": "^5.0.4"
   },

@@ -1,22 +1,35 @@
-import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { Animated, Easing, Text } from 'react-native'
 
 const Index = () => {
+  const animatedValue = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(animatedValue, {
+        toValue: 2,
+        duration: 50000,
+        easing: Easing.linear,
+        isInteraction: true,
+        useNativeDriver: false,
+      }),
+    ).start()
+  }, [animatedValue])
+
+  const backgroundInterpolation = animatedValue.interpolate({
+    inputRange: [0, 1, 2],
+    outputRange: ['rgb(80, 200, 120)', 'rgb(100, 120, 200)', 'rgb(80, 200, 120)'],
+  })
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style='auto' />
-    </View>
+    <Animated.View
+      className='flex h-full w-full items-center justify-center'
+      style={{ backgroundColor: backgroundInterpolation }}>
+      <Text className='text-8xl text-white'>
+        Now, let&apos;s start making <Text className='text-pink-600'>Cilotta</Text>!
+      </Text>
+    </Animated.View>
   )
 }
 
 export default Index
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
