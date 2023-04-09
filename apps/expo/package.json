@@ -1,12 +1,15 @@
 {
   "name": "@cilotta/expo",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "index.tsx",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "clean": "git clean -xdf .expo .turbo node_modules",
+    "dev": "expo start --ios",
+    "dev:android": "expo start --android",
+    "dev:ios": "expo start --ios",
+    "lint": "eslint .",
+    "lint:fix": "pnpm lint --fix",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@expo/metro-config": "^0.7.1",
@@ -20,6 +23,7 @@
     "react-native-screens": "^3.20.0"
   },
   "devDependencies": {
+    "@cilotta/eslint-config": "*",
     "@babel/core": "^7.21.4",
     "@babel/preset-env": "^7.21.4",
     "@babel/runtime": "^7.21.0",
@@ -27,6 +31,7 @@
     "@types/babel__core": "^7.20.0",
     "@types/react": "~18.0.33",
     "@types/webpack-env": "^1.18.0",
+    "eslint": "latest",
     "typescript": "^4.9.4"
   },
   "private": true

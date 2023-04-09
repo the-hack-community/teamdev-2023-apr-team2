@@ -1,0 +1,18 @@
+{
+  "name": "@cilotta/eslint-config",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/eslint": "^8.37.0",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "eslint-config-next": "^13.3.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-turbo": "^1.8.8",
+    "eslint-plugin-react": "7.32.2",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint": "^8.38.0",
+    "typescript": "^5.0.4"
+  }
+}
