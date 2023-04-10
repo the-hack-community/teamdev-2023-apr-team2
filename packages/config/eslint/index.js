@@ -1,6 +1,7 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
   env: {
+    node: true,
     jest: true,
   },
   parserOptions: {
@@ -11,7 +12,8 @@ const config = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
-    // 'plugin:tailwindcss/recommended',
+    'plugin:tailwindcss/recommended',
+    'plugin:jest/recommended',
     'plugin:@next/next/recommended',
     'next',
     'next/core-web-vitals',
@@ -20,7 +22,7 @@ const config = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'prettier',
   ],
-  plugins: ['simple-import-sort', 'import'],
+  plugins: ['tailwindcss', 'jest', 'simple-import-sort', 'import'],
   settings: {
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
@@ -84,6 +86,14 @@ const config = {
       files: ['layout.tsx', 'template.tsx', 'head.tsx'],
       rules: {
         'react/function-component-definition': 'off',
+      },
+    },
+    {
+      files: ['*.test.tsx'],
+      rules: {
+        '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
       },
     },
   ],
