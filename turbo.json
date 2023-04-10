@@ -21,10 +21,11 @@
     "type-check": {
       "dependsOn": ["^db:generate"],
       "cache": false
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "inputs": ["**/*.{ts,tsx,js,jsx}"]
     }
   },
-  "globalEnv": [
-    "DATABASE_URL",
-    "NODE_ENV"
-  ]
+  "globalEnv": ["DATABASE_URL", "NODE_ENV"]
 }

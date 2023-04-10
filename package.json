@@ -11,7 +11,8 @@
     "type-check": "turbo type-check",
     "commit": "czg emoji",
     "prepare": "husky install",
-    "lint-staged": "lint-staged - config .lintstagedrc"
+    "lint-staged": "lint-staged - config .lintstagedrc",
+    "test": "turbo test --no-daemon"
   },
   "devDependencies": {
     "@cilotta/eslint-config": "^0.1.0",

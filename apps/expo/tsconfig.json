@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-native",
-    "types": ["nativewind/types", "webpack-env", "node"]
+    "types": ["nativewind/types", "webpack-env", "node", "jest"]
   },
   "include": ["expo-plugins", "src", "*.ts", "**/*.js", "index.tsx"],
   "exclude": ["node_modules"]

@@ -9,7 +9,8 @@
     "dev:ios": "expo start --ios",
     "lint": "eslint .",
     "lint:fix": "pnpm lint --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "jest"
   },
   "dependencies": {
     "@expo/metro-config": "^0.7.1",
@@ -36,13 +37,26 @@
     "@cilotta/eslint-config": "*",
     "@cilotta/tailwind-config": "*",
     "@expo/config-plugins": "^6.0.1",
+    "@testing-library/react-native": "^12.0.1",
     "@types/babel__core": "^7.20.0",
+    "@types/jest": "^29.5.0",
     "@types/react": "~18.0.33",
     "@types/webpack-env": "^1.18.0",
     "eslint": "latest",
+    "jest": "^29.5.0",
+    "jest-environment-node": "^29.5.0",
+    "jest-expo": "^48.0.2",
+    "react-test-renderer": "^18.2.0",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.3.1",
     "typescript": "^4.9.4"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/build/"
+    ]
   },
   "private": true
 }
