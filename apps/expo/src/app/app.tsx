@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { Animated, Easing, Text } from 'react-native'
 
-const Index = () => {
+const App = () => {
   const animatedValue = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
@@ -32,4 +32,4 @@ const Index = () => {
   )
 }
 
-export default Index
+export default App
