@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react-native'
 
-import App from '../app/app'
+import App from '../app'
 
 afterEach(cleanup)
 
