@@ -79,6 +79,9 @@ importers:
       expo-linking:
         specifier: ^4.0.1
         version: 4.0.1(expo@48.0.10)
+      expo-location:
+        specifier: ~15.1.1
+        version: 15.1.1(expo@48.0.10)
       expo-router:
         specifier: ^1.5.2
         version: 1.5.2(expo-constants@14.2.1)(expo-linking@4.0.1)(expo-modules-autolinking@1.1.2)(expo-status-bar@1.4.4)(expo@48.0.10)(metro@0.76.1)(react-dom@18.2.0)(react-native-gesture-handler@2.9.0)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.6)(react@18.2.0)
@@ -5473,6 +5476,14 @@ packages:
     transitivePeerDependencies:
       - expo
       - supports-color
+    dev: false
+
+  /expo-location@15.1.1(expo@48.0.10):
+    resolution: {integrity: sha512-hoKRlmi6Ya+NeZ72Zt385SDcSsIDpJI60TCBVO+Hc9xfKA9Hyminyyo5WiwI8J03igmPTCl8Y37MxBNKY9AWkg==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 48.0.10(@babel/core@7.21.4)
     dev: false
 
   /expo-modules-autolinking@1.1.2:

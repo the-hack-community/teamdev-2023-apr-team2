@@ -27,5 +27,5 @@
       "inputs": ["**/*.{ts,tsx,js,jsx}"]
     }
   },
-  "globalEnv": ["DATABASE_URL", "NODE_ENV"]
+  "globalEnv": ["DATABASE_URL", "NODE_ENV", "REACT_APP_GOOGLE_MAP_APIKEY"]
 }
