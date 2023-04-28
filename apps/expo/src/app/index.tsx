@@ -24,6 +24,8 @@ const INITIAL_POSITION = {
   longitudeDelta: LONGITUDE_DELTA,
 }
 
+const GOOGLE_MAP_APIKEY = process.env.REACT_APP_GOOGLE_MAP_APIKEY
+
 //型定義
 type InputAutoCompleteProps = {
   placeholder: string
@@ -55,7 +57,7 @@ const App = () => {
             console.log('details')
           }}
           query={{
-            key: 'AIzaSyC03-fqpeJWh8tEHhfYwZeNz7iNCPWjNJw',
+            key: { GOOGLE_MAP_APIKEY },
             language: 'ja',
           }}
         />
@@ -143,8 +145,7 @@ const App = () => {
         ref={mapRef}
         style={styles.map}
         initialRegion={INITIAL_POSITION}
-        provider={PROVIDER_GOOGLE}
-      >
+        provider={PROVIDER_GOOGLE}>
         {/* 現在地 */}
         {location && (
           <Marker coordinate={location}>
@@ -169,7 +170,7 @@ const App = () => {
           <MapViewDirections
             origin={location}
             destination={destination}
-            apikey='AIzaSyC03-fqpeJWh8tEHhfYwZeNz7iNCPWjNJw'
+            apikey={GOOGLE_MAP_APIKEY as string}
             strokeColor='#6644ff' //ルートの色
             strokeWidth={4} //ルートの太さ
             onReady={traceRouteOnReady} //成功したら距離と時間が返却される
