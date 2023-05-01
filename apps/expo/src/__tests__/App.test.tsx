@@ -1,10 +1,10 @@
 import { cleanup, render, screen } from '@testing-library/react-native'
 
-import App from '../app'
+import Paragraph from '../conponents/atoms/Paragraph/Paragraph'
 
 afterEach(cleanup)
 
 test('renders correctly', () => {
-  render(<App />)
+  render(<Paragraph>Cilotta</Paragraph>)
   expect(screen.getByText('Cilotta')).toBeTruthy()
 })
