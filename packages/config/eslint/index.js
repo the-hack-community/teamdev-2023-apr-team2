@@ -3,6 +3,7 @@ const config = {
   env: {
     node: true,
     jest: true,
+    'jest/globals': true,
   },
   parserOptions: {
     ecmaVersion: 'latest',
@@ -10,8 +11,6 @@ const config = {
   },
   extends: [
     'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
     'plugin:tailwindcss/recommended',
     'plugin:jest/recommended',
     'plugin:@next/next/recommended',
@@ -22,7 +21,7 @@ const config = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'prettier',
   ],
-  plugins: ['tailwindcss', 'jest', 'simple-import-sort', 'import'],
+  plugins: ['tailwindcss', 'simple-import-sort', 'import'],
   settings: {
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
@@ -73,6 +72,12 @@ const config = {
       { blankLine: 'any', prev: 'directive', next: 'directive' },
     ],
     'react/jsx-fragments': ['error', 'syntax'],
+    'turbo/no-undeclared-env-vars': [
+      'error',
+      {
+        allowList: ['GOOGLE_MAP_API_KEY'],
+      },
+    ],
   },
   overrides: [
     {
