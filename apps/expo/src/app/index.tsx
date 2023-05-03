@@ -24,7 +24,7 @@ const INITIAL_POSITION = {
   longitudeDelta: LONGITUDE_DELTA,
 }
 
-const GOOGLE_MAP_APIKEY = process.env.REACT_APP_GOOGLE_MAP_APIKEY
+const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY
 
 //型定義
 type InputAutoCompleteProps = {
@@ -35,35 +35,31 @@ type RouteProps = {
   distance: number
 }
 
+// 目的地検索ボックス
+const InputAutoComplete = ({ placeholder, onPlaceSelected }: InputAutoCompleteProps) => {
+  return (
+    <GooglePlacesAutocomplete
+      styles={{ textInput: styles.input }}
+      placeholder={placeholder}
+      fetchDetails //座標の値を取得
+      onPress={(_, details = null) => {
+        onPlaceSelected(details)
+      }}
+      query={{
+        key: GOOGLE_MAP_API_KEY,
+        language: 'ja',
+      }}
+    />
+  )
+}
+
 const App = () => {
   const [location, setLocation] = useState<LatLng | null>(null)
   const [destination, setDestination] = useState<LatLng | null>(null)
   const [showDirections, setShowDirections] = useState(false)
-  const [errorMsg, setErrorMsg] = useState<null | string>(null)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [distance, setDistance] = useState<number>(0)
   const mapRef = useRef<MapView>(null)
-
-  // 目的地検索ボックス
-  const InputAutoComplete = ({ placeholder, onPlaceSelected }: InputAutoCompleteProps) => {
-    return (
-      <>
-        <GooglePlacesAutocomplete
-          styles={{ textInput: styles.input }}
-          placeholder={placeholder}
-          fetchDetails //座標の値を取得
-          onPress={(_, details = null) => {
-            onPlaceSelected(details)
-            console.log('data')
-            console.log('details')
-          }}
-          query={{
-            key: { GOOGLE_MAP_APIKEY },
-            language: 'ja',
-          }}
-        />
-      </>
-    )
-  }
 
   // 地図が移動した時のアニメーション
   const moveTo = async (position: LatLng) => {
@@ -125,7 +121,7 @@ const App = () => {
           setLocation({ latitude, longitude })
         },
       )
-      console.log('location!', location) //=>{"remove": [Function remove]}
+      console.log('location!', location)
     }
     void getPermissions()
   }, [])
@@ -133,10 +129,18 @@ const App = () => {
   let text = 'Waiting..'
 
   if (errorMsg) {
-    text = errorMsg
+    console.error(errorMsg)
   } else if (location) {
     text = JSON.stringify(location)
     console.log(text)
+  }
+
+  if (!GOOGLE_MAP_API_KEY) {
+    return (
+      <View style={styles.container}>
+        <Text>GOOGLE MAP APIが未設定です</Text>
+      </View>
+    )
   }
 
   return (
@@ -156,13 +160,11 @@ const App = () => {
         )}
         {/* 目的地 */}
         {destination && (
-          <>
-            <Marker coordinate={destination}>
-              <Callout>
-                <Text>目的地</Text>
-              </Callout>
-            </Marker>
-          </>
+          <Marker coordinate={destination}>
+            <Callout>
+              <Text>目的地</Text>
+            </Callout>
+          </Marker>
         )}
 
         {/* //ルート表示 */}
@@ -170,7 +172,7 @@ const App = () => {
           <MapViewDirections
             origin={location}
             destination={destination}
-            apikey={GOOGLE_MAP_APIKEY as string}
+            apikey={GOOGLE_MAP_API_KEY ?? ''}
             strokeColor='#6644ff' //ルートの色
             strokeWidth={4} //ルートの太さ
             onReady={traceRouteOnReady} //成功したら距離と時間が返却される
@@ -196,11 +198,7 @@ const App = () => {
         </TouchableOpacity>
 
         {/* 距離表示 */}
-        {distance ? (
-          <View>
-            <Text>距離:{distance.toFixed(2)}km</Text>
-          </View>
-        ) : null}
+        {distance ? <Text>距離:{distance.toFixed(2)}km</Text> : null}
       </View>
     </View>
   )
