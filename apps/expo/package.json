@@ -2,6 +2,8 @@
   "name": "@cilotta/expo",
   "version": "0.1.0",
   "main": "index.tsx",
+  "license": "MIT",
+  "private": true,
   "scripts": {
     "clean": "git clean -xdf .expo .turbo node_modules",
     "dev": "expo start",
@@ -62,6 +64,5 @@
       "/node_modules/",
       "/build/"
     ]
-  },
-  "private": true
+  }
 }
