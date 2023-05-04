@@ -5,8 +5,11 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "dotenv -- turbo run dev --no-daemon",
-    "dev:android": "dotenv -e .env.local turbo run dev:android",
     "dev:ios": "dotenv -e .env.local turbo run dev:ios",
+    "dev:android": "dotenv -e .env.local turbo run dev:android",
+    "dev:server": "dotenv -e .env.local turbo run dev:server",
+    "dev:migrate": "dotenv -e .env.local turbo run dev:migrate",
+    "dev:db": "dotenv -e .env.local turbo run dev:db",
     "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,md,json}\" --ignore-path .gitignore",
     "lint": "turbo lint && manypkg check",
     "lint:fix": "turbo lint:fix && manypkg fix",

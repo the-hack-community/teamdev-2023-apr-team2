@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  cilotta-db:
+    image: postgres:15.2-alpine
+    container_name: cilotta-db
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB:
