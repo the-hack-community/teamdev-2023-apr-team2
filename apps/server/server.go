@@ -1,15 +1,19 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/labstack/echo/v4"
+	"server/controller"
+	"server/db"
+	"server/repository"
+	"server/router"
+	"server/usecase"
 )
 
 func main() {
-	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	cilottaDB := db.NewDB()
+	parkingRepository := repository.NewParkingRepository(cilottaDB)
+	parkingUseCase := usecase.NewParkingUseCase(parkingRepository)
+	parkingController := controller.NewParkingController(parkingUseCase)
+	e := router.NewRouter(parkingController)
+
 	e.Logger.Fatal(e.Start("localhost:1323"))
 }
