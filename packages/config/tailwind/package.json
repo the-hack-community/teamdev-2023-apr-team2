@@ -1,11 +1,11 @@
 {
   "name": "@cilotta/tailwind-config",
   "version": "0.1.0",
-  "main": "index.ts",
+  "main": "index.js",
   "license": "MIT",
   "private": true,
   "files": [
-    "index.ts",
+    "index.js",
     "postcss.js"
   ],
   "devDependencies": {

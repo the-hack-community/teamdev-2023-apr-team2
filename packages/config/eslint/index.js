@@ -78,6 +78,8 @@ const config = {
         allowList: ['GOOGLE_MAP_API_KEY'],
       },
     ],
+    'tailwindcss/no-custom-classname': 'error',
+    'tailwindcss/classnames-order': ['error', { config: '../tailwind' }],
   },
   overrides: [
     {
