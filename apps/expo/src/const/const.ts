@@ -1,6 +1,9 @@
 import { Dimensions } from 'react-native'
 
 export const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY
+export const GOOGLE_WEB_CLIENT_ID = process.env.GOOGLE_WEB_CLIENT_ID
+export const GOOGLE_ANDROID_CLIENT_ID = process.env.GOOGLE_ANDROID_CLIENT_ID
+export const FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID
 
 export const mapStyle = [
   {
