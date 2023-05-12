@@ -17,5 +17,6 @@ type Location struct {
 
 type LocationResponse struct {
 	ParkingID uint
-	UpdatedAt time.Time `json:"updated_at"`
+	Longitude float64
+	Latitude  float64
 }
