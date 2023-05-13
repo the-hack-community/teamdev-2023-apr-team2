@@ -10,18 +10,18 @@ import (
 type ILocationController interface {
 	GetAllLocation(c echo.Context) error
 	GetLocationById(c echo.Context) error
-	GetLocationsByLngLat(c echo.Context) error
+	GetLocationsByLatLng(c echo.Context) error
 }
 
 type locationController struct {
 	lu usecase.ILocationUseCase
 }
 type requestBody struct {
-	Latitude struct {
+	Lat struct {
 		Min float64 `json:"min"`
 		Max float64 `json:"max"`
 	} `json:"latitude"`
-	Longitude struct {
+	Lng struct {
 		Min float64 `json:"min"`
 		Max float64 `json:"max"`
 	} `json:"longitude"`
@@ -49,13 +49,12 @@ func (lc *locationController) GetLocationById(c echo.Context) error {
 	return c.JSON(http.StatusOK, locationRes)
 }
 
-func (lc *locationController) GetLocationsByLngLat(c echo.Context) error {
+func (lc *locationController) GetLocationsByLatLng(c echo.Context) error {
 	var req requestBody
 	if err := c.Bind(&req); err != nil {
 		return c.String(http.StatusBadRequest, "Invalid parameters")
 	}
-
-	locationRes, err := lc.lu.GetLocationsByLngLat(req.Longitude.Min, req.Longitude.Max, req.Latitude.Min, req.Latitude.Max)
+	locationRes, err := lc.lu.GetLocationsByLatLng(req.Lat.Min, req.Lat.Max, req.Lng.Min, req.Lng.Max)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}

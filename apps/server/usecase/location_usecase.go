@@ -8,7 +8,7 @@ import (
 type ILocationUseCase interface {
 	GetAllLocation() ([]model.LocationResponse, error)
 	GetLocationById(locationId uint) (model.LocationResponse, error)
-	GetLocationsByLngLat(lngMin float64, lngMax float64, latMin float64, latMax float64) ([]model.LocationResponse, error)
+	GetLocationsByLatLng(latMin float64, latMax float64, lngMin float64, lngMax float64) ([]model.LocationResponse, error)
 }
 
 type locationUseCase struct {
@@ -44,29 +44,29 @@ func (lu *locationUseCase) GetLocationById(locationId uint) (model.LocationRespo
 	if err := lu.pr.GetLocationById(&location, locationId); err != nil {
 		return model.LocationResponse{}, err
 	}
-	lng, _ := location.Longitude.Float64()
 	lat, _ := location.Latitude.Float64()
+	lng, _ := location.Longitude.Float64()
 	resLocation := model.LocationResponse{
 		ParkingID: location.ParkingID,
-		Longitude: lng,
 		Latitude:  lat,
+		Longitude: lng,
 	}
 	return resLocation, nil
 }
 
-func (lu *locationUseCase) GetLocationsByLngLat(lngMin float64, lngMax float64, latMin float64, latMax float64) ([]model.LocationResponse, error) {
+func (lu *locationUseCase) GetLocationsByLatLng(latMin float64, latMax float64, lngMin float64, lngMax float64) ([]model.LocationResponse, error) {
 	var locationLot []model.Location
-	if err := lu.pr.GetLocationsByLngLat(&locationLot, lngMin, lngMax, latMin, latMax); err != nil {
+	if err := lu.pr.GetLocationsByLatLng(&locationLot, latMin, latMax, lngMin, lngMax); err != nil {
 		return nil, err
 	}
 	var resLocation []model.LocationResponse
 	for _, location := range locationLot {
-		lng, _ := location.Longitude.Float64()
 		lat, _ := location.Latitude.Float64()
+		lng, _ := location.Longitude.Float64()
 		l := model.LocationResponse{
 			ParkingID: location.ParkingID,
-			Longitude: lng,
 			Latitude:  lat,
+			Longitude: lng,
 		}
 		resLocation = append(resLocation, l)
 	}

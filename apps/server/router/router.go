@@ -16,7 +16,7 @@ func NewRouter(pc controller.IParkingController, lc controller.ILocationControll
 	l := e.Group("/location")
 	l.GET("", lc.GetAllLocation)
 	l.GET("/:locationId", lc.GetLocationById)
-	l.POST("", lc.GetLocationsByLngLat)
+	l.POST("", lc.GetLocationsByLatLng)
 
 	return e
 }

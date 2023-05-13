@@ -8,7 +8,7 @@ import (
 type ILocationRepository interface {
 	GetAllLocation(location *[]model.Location) error
 	GetLocationById(location *model.Location, locationId uint) error
-	GetLocationsByLngLat(location *[]model.Location, lngMin float64, lngMax float64, latMin float64, latMax float64) error
+	GetLocationsByLatLng(location *[]model.Location, latMin float64, latMax float64, lngMin float64, lngMax float64) error
 }
 
 type locationRepository struct {
@@ -33,8 +33,8 @@ func (pr *locationRepository) GetLocationById(location *model.Location, location
 	return nil
 }
 
-func (pr *locationRepository) GetLocationsByLngLat(locations *[]model.Location, lngMin float64, lngMax float64, latMin float64, latMax float64) error {
-	if err := pr.db.Where("longitude BETWEEN ? AND ? AND latitude BETWEEN ? AND ?", lngMin, lngMax, latMin, latMax).
+func (pr *locationRepository) GetLocationsByLatLng(locations *[]model.Location, latMin float64, latMax float64, lngMin float64, lngMax float64) error {
+	if err := pr.db.Where("latitude BETWEEN ? AND ? AND longitude BETWEEN ? AND ?", latMin, latMax, lngMin, lngMax).
 		Find(locations).Error; err != nil {
 		return err
 	}
