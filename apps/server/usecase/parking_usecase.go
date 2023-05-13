@@ -27,8 +27,15 @@ func (pu *parkingUseCase) GetAllParking() ([]model.ParkingResponse, error) {
 	var resParking []model.ParkingResponse
 	for _, parking := range parkingLot {
 		p := model.ParkingResponse{
-			ID:        parking.ID,
-			UpdatedAt: parking.UpdatedAt,
+			ID:           parking.ID,
+			Name:         parking.Name,
+			Address:      parking.Address,
+			UsageTime:    parking.UsageTime,
+			Capacity:     parking.Capacity,
+			MultiStorey:  parking.MultiStorey,
+			WithRoof:     parking.WithRoof,
+			FreeHour:     parking.FreeHour,
+			OnetimePrice: parking.OnetimePrice,
 		}
 		resParking = append(resParking, p)
 	}
@@ -41,8 +48,15 @@ func (pu *parkingUseCase) GetParkingById(parkingId uint) (model.ParkingResponse,
 		return model.ParkingResponse{}, err
 	}
 	resParking := model.ParkingResponse{
-		ID:        parking.ID,
-		UpdatedAt: parking.UpdatedAt,
+		ID:           parking.ID,
+		Name:         parking.Name,
+		Address:      parking.Address,
+		UsageTime:    parking.UsageTime,
+		Capacity:     parking.Capacity,
+		MultiStorey:  parking.MultiStorey,
+		WithRoof:     parking.WithRoof,
+		FreeHour:     parking.FreeHour,
+		OnetimePrice: parking.OnetimePrice,
 	}
 	return resParking, nil
 }
@@ -52,8 +66,15 @@ func (pu *parkingUseCase) CreateParking(parking model.Parking) (model.ParkingRes
 		return model.ParkingResponse{}, err
 	}
 	resParking := model.ParkingResponse{
-		ID:        parking.ID,
-		UpdatedAt: parking.UpdatedAt,
+		ID:           parking.ID,
+		Name:         parking.Name,
+		Address:      parking.Address,
+		UsageTime:    parking.UsageTime,
+		Capacity:     parking.Capacity,
+		MultiStorey:  parking.MultiStorey,
+		WithRoof:     parking.WithRoof,
+		FreeHour:     parking.FreeHour,
+		OnetimePrice: parking.OnetimePrice,
 	}
 	return resParking, nil
 }
