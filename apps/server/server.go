@@ -17,6 +17,11 @@ func main() {
 	userUseCase := usecase.NewUserUseCase(userRepository, userValidator)
 	userController := controller.NewUserController(userUseCase)
 
+	historyValidator := validator.NewHistoryValidator()
+	historyRepository := repository.NewHistoryRepository(cilottaDB)
+	historyUseCase := usecase.NewHistoryUseCase(historyRepository, historyValidator)
+	historyController := controller.NewHistoryController(historyUseCase)
+
 	parkingRepository := repository.NewParkingRepository(cilottaDB)
 	parkingUseCase := usecase.NewParkingUseCase(parkingRepository)
 	parkingController := controller.NewParkingController(parkingUseCase)
@@ -25,7 +30,7 @@ func main() {
 	locationUseCase := usecase.NewLocationUseCase(locationRepository)
 	locationController := controller.NewLocationController(locationUseCase)
 
-	e := router.NewRouter(userController, parkingController, locationController)
+	e := router.NewRouter(userController, historyController, parkingController, locationController)
 
 	e.Logger.Fatal(e.Start("localhost:1323"))
 }
