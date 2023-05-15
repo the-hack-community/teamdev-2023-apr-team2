@@ -4,7 +4,7 @@ import "time"
 
 type Parking struct {
 	ID           uint    `json:"id" gorm:"primaryKey;autoIncrement"`
-	Name         string  `json:"name" gorm:"not null:unique"`
+	Name         string  `json:"name" gorm:"not null;unique"`
 	Address      string  `json:"address" gorm:"not null"`
 	UsageTime    string  `json:"usage_time" gorm:"not null"`
 	Capacity     uint16  `json:"capacity" gorm:"not null"`
@@ -20,7 +20,7 @@ type Parking struct {
 
 type ParkingResponse struct {
 	ID           uint   `json:"id" gorm:"primaryKey"`
-	Name         string `json:"name" gorm:"not null:unique"`
+	Name         string `json:"name" gorm:"not null;unique"`
 	Address      string `json:"address" gorm:"not null"`
 	UsageTime    string `json:"usage_time" gorm:"not null"`
 	Capacity     uint16 `json:"capacity" gorm:"not null"`
