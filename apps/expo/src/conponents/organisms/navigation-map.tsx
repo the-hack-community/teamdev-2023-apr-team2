@@ -1,11 +1,16 @@
 import * as Location from 'expo-location'
 import { useEffect, useRef, useState } from 'react'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 import type { LatLng } from 'react-native-maps'
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 
-import { GOOGLE_MAP_API_KEY, INITIAL_POSITION, mapStyle } from '../../const/const'
+import { API_BASE_URL, GOOGLE_MAP_API_KEY, INITIAL_POSITION, mapStyle } from '../../const/const'
+import { traceRoute } from '../../lib/map-controll'
+import { getParkingInfo, getParkingListByLatLng } from '../../lib/parking-api'
+import type { ParkingInfo, ParkingLocation } from '../../type/type'
+import NavigationIcon from '../atoms/navigation-icon'
+import ParkingIcon from '../atoms/parking-icon'
 import MapSearchArea from './map-search-area'
 
 const NavigationMap = () => {
@@ -14,12 +19,15 @@ const NavigationMap = () => {
   const [destination, setDestination] = useState<LatLng | null>(null)
   const [showDirections, setShowDirections] = useState(false)
   const [distance, setDistance] = useState<number>(0)
+  const [parkingLocationsList, setParkingLocationsList] = useState<ParkingLocation[]>([])
+  const [parkingList, setParkingList] = useState<ParkingInfo[]>([])
+  const [nearParkingInfo, setNearParkingInfo] = useState<ParkingInfo | null>(null)
+  const [distanceToParking, setDistanceToParking] = useState<number>(0)
+  const [distanceToDestination, setDistanceToDestination] = useState<number>(0)
 
-  const traceRouteOnReady = ({ distance }: { distance: number }) => {
-    if (distance) {
-      setDistance(distance)
-    }
-  }
+  useEffect(() => {
+    setDistance(distanceToParking + distanceToDestination)
+  }, [distanceToDestination, distanceToParking])
 
   useEffect(() => {
     const getCurrentLocation = async () => {
@@ -40,14 +48,49 @@ const NavigationMap = () => {
     }
     void getCurrentLocation()
   }, [])
+  useEffect(() => {
+    const areaNumber = 0.005
+    // const areaNumber = 0.014
+    if (!destination) return
+    try {
+      const getParkingList = async () => {
+        const parkingLocationList = await getParkingListByLatLng({
+          minLat: destination.latitude - areaNumber,
+          maxLat: destination.latitude + areaNumber,
+          minLng: destination.longitude - areaNumber,
+          maxLng: destination.longitude + areaNumber,
+        })
+        setParkingLocationsList(parkingLocationList)
+      }
+      void getParkingList()
+    } catch (error) {
+      console.log(error)
+    }
+  }, [destination])
+  useEffect(() => {
+    const promiseList = parkingLocationsList.map((parking) => getParkingInfo(parking.id))
+    const getParkingInfoList = async () => {
+      const result = await Promise.all(promiseList)
+      const parkingInfoList = parkingLocationsList.map((parkingLocation) => {
+        const parkingBaseInfo = result.find(
+          (parkingBaseInfo) => parkingBaseInfo.id === parkingLocation.id,
+        )
+        return { ...parkingBaseInfo, ...parkingLocation }
+      }) as ParkingInfo[]
 
-  if (!GOOGLE_MAP_API_KEY) return <></>
+      setParkingList(parkingInfoList)
 
+      // setNearParkingInfo(getCheapParkingInfo(parkingInfoList)!)
+    }
+    void getParkingInfoList()
+  }, [parkingLocationsList])
+
+  if (!GOOGLE_MAP_API_KEY || !API_BASE_URL) return <></>
   return (
-    <>
+    <View className='h-full w-full'>
       <MapView
         ref={mapRef}
-        className='h-full w-full'
+        className='h-full'
         initialRegion={INITIAL_POSITION}
         provider={PROVIDER_GOOGLE}
         showsUserLocation
@@ -57,63 +100,77 @@ const NavigationMap = () => {
         minZoomLevel={10}
         maxZoomLevel={20}
         customMapStyle={mapStyle}
-        onRegionChangeComplete={(Region, { isGesture: boolean }) => {
-          console.log(Region)
-          console.log(boolean)
-        }}>
-        {/* 現在地 */}
-        {location && (
-          <Marker coordinate={location}>
+        showsIndoors={false}>
+        {/* 目的地 */}
+        {destination && (
+          <Marker coordinate={destination}>
             <Callout>
-              <Text>出発地</Text>
+              <Text>目的地</Text>
             </Callout>
           </Marker>
         )}
-        {/* 目的地 */}
-        {destination && (
-          <>
-            <Marker coordinate={destination}>
-              <Callout>
-                <Text>目的地</Text>
-              </Callout>
-            </Marker>
+        {parkingList.length > 0 &&
+          parkingList.map((parking) => (
             <Marker
+              key={parking.id}
               coordinate={{
-                latitude: 34.6919269,
-                longitude: 135.5015518,
-              }}>
-              <Callout>
-                <Text>目的地1</Text>
-              </Callout>
+                latitude: parking.latitude,
+                longitude: parking.longitude,
+              }}
+              onPress={() => setNearParkingInfo(parking)}>
+              <View className='flex max-w-sm flex-row'>
+                {parking.free_hour > 0 ? (
+                  <ParkingIcon
+                    bgColor={parking.onetime_price > 101 ? 'bg-white' : 'bg-arctic'}
+                    iconColor={parking.with_roof ? '#29616C' : '#FA8C61'}
+                  />
+                ) : (
+                  <ParkingIcon bgColor={parking.onetime_price > 101 ? 'bg-orange' : 'bg-arctic'} />
+                )}
+              </View>
             </Marker>
+          ))}
+        {/* //ルート表示 */}
+        {showDirections && location && destination && nearParkingInfo && (
+          <>
+            <MapViewDirections
+              origin={location}
+              destination={{
+                latitude: nearParkingInfo.latitude,
+                longitude: nearParkingInfo.longitude,
+              }}
+              apikey={GOOGLE_MAP_API_KEY}
+              strokeColor='#FA8C61' //ルートの色
+              strokeWidth={4} //ルートの太さ
+              onReady={(mapDirection) => setDistanceToParking(mapDirection.distance)}
+              mode='BICYCLING'
+              region='JP'
+              language='ja'
+              onError={(error) => console.error(error)}
+            />
+            <MapViewDirections
+              origin={{
+                latitude: nearParkingInfo.latitude,
+                longitude: nearParkingInfo.longitude,
+              }}
+              destination={destination}
+              apikey={GOOGLE_MAP_API_KEY}
+              strokeColor='#29616C'
+              strokeWidth={4}
+              onReady={(mapDirection) => setDistanceToDestination(mapDirection.distance)}
+              mode='WALKING'
+              region='JP'
+              language='ja'
+              onError={(error) => console.error(error)}
+            />
           </>
         )}
-
-        {/* //ルート表示 */}
-        {showDirections && location && destination && (
-          <MapViewDirections
-            origin={location}
-            destination={destination}
-            apikey={GOOGLE_MAP_API_KEY}
-            strokeColor='#6644ff' //ルートの色
-            strokeWidth={4} //ルートの太さ
-            onReady={traceRouteOnReady} //成功したら距離と時間が返却される
-            mode='BICYCLING'
-            region='JP'
-            language='ja'
-            waypoints={[
-              {
-                latitude: 34.6886959,
-                longitude: 135.5036893,
-              },
-            ]}
-            splitWaypoints={true}
-            onError={(errorMessage) => {
-              console.log(errorMessage)
-            }}
-          />
-        )}
       </MapView>
+      <View
+        className='absolute bottom-10 right-4'
+        onTouchStart={() => traceRoute({ location, destination, setShowDirections, mapRef })}>
+        <NavigationIcon />
+      </View>
       <MapSearchArea
         distance={distance}
         destination={destination}
@@ -121,8 +178,9 @@ const NavigationMap = () => {
         setShowDirections={setShowDirections}
         mapRef={mapRef}
         location={location}
+        nearParkingInfo={nearParkingInfo}
       />
-    </>
+    </View>
   )
 }
 

@@ -1,11 +1,13 @@
 import { Dimensions } from 'react-native'
+import type { MapStyleElement } from 'react-native-maps'
 
 export const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY
 export const GOOGLE_WEB_CLIENT_ID = process.env.GOOGLE_WEB_CLIENT_ID
 export const GOOGLE_ANDROID_CLIENT_ID = process.env.GOOGLE_ANDROID_CLIENT_ID
 export const FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID
+export const API_BASE_URL = process.env.API_BASE_URL
 
-export const mapStyle = [
+export const mapStyle: MapStyleElement[] = [
   {
     featureType: 'administrative',
     elementType: 'all',
@@ -209,8 +211,8 @@ const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.02
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 export const INITIAL_POSITION = {
-  latitude: 35.689506,
-  longitude: 139.6917,
+  latitude: 34.6623621604858,
+  longitude: 135.50213718786836,
   latitudeDelta: LATITUDE_DELTA,
   longitudeDelta: LONGITUDE_DELTA,
 }
