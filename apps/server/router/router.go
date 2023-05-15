@@ -5,8 +5,12 @@ import (
 	"server/controller"
 )
 
-func NewRouter(pc controller.IParkingController, lc controller.ILocationController) *echo.Echo {
+func NewRouter(uc controller.IUserController, pc controller.IParkingController, lc controller.ILocationController) *echo.Echo {
 	e := echo.New()
+
+	e.POST("/signup", uc.SignUp)
+	e.POST("/login", uc.LogIn)
+	e.POST("/logout", uc.LogOut)
 
 	p := e.Group("/parking")
 	p.GET("", pc.GetAllParking)
