@@ -1,42 +1,33 @@
-import * as Location from 'expo-location'
-import { useEffect, useState } from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { AuthStore } from '@Stores/store'
+import { useRootNavigationState, useRouter, useSegments } from 'expo-router'
+import React, { useEffect } from 'react'
+import { Text, View } from 'react-native'
 
-import HistoryButton from '../conponents/organisms/history-button'
-import NavigationMap from '../conponents/organisms/navigation-map'
-import { GOOGLE_MAP_API_KEY } from '../const/const'
-
-const App = () => {
-  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+const Index = () => {
+  const segments = useSegments()
+  const router = useRouter()
+  const { isLoggedIn } = AuthStore.useState((s) => s)
+  const navigationState = useRootNavigationState()
 
   useEffect(() => {
-    const getPermissions = async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync()
-      if (status !== 'granted') {
-        setErrorMsg('位置情報取得には承認が必要です。')
-        return
-      }
+    if (!navigationState?.key) return
+
+    const inAuthGroup = segments[0] === '(auth)'
+
+    if (
+      // If the user is not signed in and the initial segment is not anything
+      //  segment is not anything in the auth group.
+      !isLoggedIn &&
+      !inAuthGroup
+    ) {
+      // Redirect to the login page.
+      router.replace('/login')
+    } else if (isLoggedIn) {
+      // go to tabs root.
+      router.replace('/(stack)/home')
     }
-    void getPermissions()
-  }, [])
-  if (errorMsg) console.error(errorMsg)
+  }, [isLoggedIn, segments, navigationState?.key])
 
-  if (!GOOGLE_MAP_API_KEY) {
-    return (
-      <SafeAreaView className='bg-arctic h-full w-full'>
-        <Text>GOOGLE MAP APIが未設定です</Text>
-      </SafeAreaView>
-    )
-  }
-
-  return (
-    <SafeAreaView className='bg-arctic h-full w-full'>
-      <NavigationMap />
-      <View className='absolute bottom-10 left-4'>
-        <HistoryButton href='/history' />
-      </View>
-    </SafeAreaView>
-  )
+  return <View>{!navigationState?.key ? <Text>LOADING...</Text> : <></>}</View>
 }
-
-export default App
+export default Index

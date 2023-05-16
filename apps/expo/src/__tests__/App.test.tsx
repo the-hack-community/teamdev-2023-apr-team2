@@ -1,6 +1,5 @@
+import Paragraph from '@Components/atoms/Paragraph/Paragraph'
 import { cleanup, render, screen } from '@testing-library/react-native'
-
-import Paragraph from '../conponents/atoms/Paragraph/Paragraph'
 
 afterEach(cleanup)
 
