@@ -72,7 +72,6 @@ const MapSearchArea = ({
           styles={{
             container: {
               flex: 1,
-              maxWidth: '85%',
             },
             textInput: {
               backgroundColor: 'transparent',
@@ -102,7 +101,7 @@ const MapSearchArea = ({
           }}
           renderRightButton={() => (
             <TouchableOpacity // ルート検索ボタン
-              className='bg-orange mr-[-75px] mt-2 flex h-8 w-8 items-center justify-center rounded-full'
+              className='bg-orange mr-2 mt-2 flex h-8 w-8 items-center justify-center rounded-full'
               onPress={() => traceRoute({ location, destination, setShowDirections, mapRef })}>
               <SearchIcon />
             </TouchableOpacity>
