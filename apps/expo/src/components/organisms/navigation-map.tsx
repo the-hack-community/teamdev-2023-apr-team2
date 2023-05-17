@@ -1,3 +1,4 @@
+import MarkerIcon from '@Components/atoms/marker-icon'
 import NavigationIcon from '@Components/atoms/navigation-icon'
 import ParkingIcon from '@Components/atoms/parking-icon'
 import MapSearchArea from '@Components/organisms/map-search-area'
@@ -8,9 +9,9 @@ import { AuthStore } from '@Stores/store'
 import type { ParkingInfo, ParkingLocation } from '@Type/type'
 import * as Location from 'expo-location'
 import { useEffect, useRef, useState } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import type { LatLng } from 'react-native-maps'
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 
 const NavigationMap = () => {
@@ -112,9 +113,18 @@ const NavigationMap = () => {
         {/* 目的地 */}
         {destination && (
           <Marker coordinate={destination}>
-            <Callout>
-              <Text>目的地</Text>
-            </Callout>
+            <View
+              style={{
+                width: 50,
+                height: 50,
+                position: 'relative',
+              }}>
+              <MarkerIcon
+                width='100%'
+                height='100%'
+                viewBox='-3.5 0 30 30'
+              />
+            </View>
           </Marker>
         )}
         {parkingList.length > 0 &&
