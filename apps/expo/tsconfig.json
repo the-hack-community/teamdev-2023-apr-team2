@@ -2,7 +2,18 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-native",
-    "types": ["nativewind/types", "webpack-env", "node", "jest"]
+    "types": ["nativewind/types", "webpack-env", "node", "jest"],
+    "baseUrl": ".",
+    "paths": {
+      "@Navigation/*": ["src/navigation/*"],
+      "@Components/*": ["src/components/*"],
+      "@Screens/*": ["src/screens/*"],
+      "@Stores/*": ["src/stores/*"],
+      "@Assets/*": ["assets/*"],
+      "@Const/*": ["src/const/*"],
+      "@Lib/*": ["src/lib/*"],
+      "@Type/*": ["src/type/*"]
+    }
   },
   "include": ["expo-plugins", "src", "*.ts", "**/*.js", "index.tsx", ".eslintrc.js"],
   "exclude": ["node_modules", "tailwind.config.js"]

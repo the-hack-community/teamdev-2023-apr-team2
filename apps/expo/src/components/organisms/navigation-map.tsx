@@ -1,17 +1,18 @@
+import MarkerIcon from '@Components/atoms/marker-icon'
+import NavigationIcon from '@Components/atoms/navigation-icon'
+import ParkingIcon from '@Components/atoms/parking-icon'
+import MapSearchArea from '@Components/organisms/map-search-area'
+import { API_BASE_URL, GOOGLE_MAP_API_KEY, INITIAL_POSITION, mapStyle } from '@Const/const'
+import { traceRoute } from '@Lib/map-controll'
+import { getParkingInfo, getParkingListByLatLng } from '@Lib/parking-api'
+import { AuthStore } from '@Stores/store'
+import type { ParkingInfo, ParkingLocation } from '@Type/type'
 import * as Location from 'expo-location'
 import { useEffect, useRef, useState } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import type { LatLng } from 'react-native-maps'
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
-
-import { API_BASE_URL, GOOGLE_MAP_API_KEY, INITIAL_POSITION, mapStyle } from '../../const/const'
-import { traceRoute } from '../../lib/map-controll'
-import { getParkingInfo, getParkingListByLatLng } from '../../lib/parking-api'
-import type { ParkingInfo, ParkingLocation } from '../../type/type'
-import NavigationIcon from '../atoms/navigation-icon'
-import ParkingIcon from '../atoms/parking-icon'
-import MapSearchArea from './map-search-area'
 
 const NavigationMap = () => {
   const mapRef = useRef<MapView>(null)
@@ -24,6 +25,8 @@ const NavigationMap = () => {
   const [nearParkingInfo, setNearParkingInfo] = useState<ParkingInfo | null>(null)
   const [distanceToParking, setDistanceToParking] = useState<number>(0)
   const [distanceToDestination, setDistanceToDestination] = useState<number>(0)
+
+  const { csrfToken } = AuthStore.useState((s) => s)
 
   useEffect(() => {
     setDistance(distanceToParking + distanceToDestination)
@@ -59,6 +62,7 @@ const NavigationMap = () => {
           maxLat: destination.latitude + areaNumber,
           minLng: destination.longitude - areaNumber,
           maxLng: destination.longitude + areaNumber,
+          csrfToken,
         })
         setParkingLocationsList(parkingLocationList)
       }
@@ -67,8 +71,10 @@ const NavigationMap = () => {
       console.log(error)
     }
   }, [destination])
+
   useEffect(() => {
     const promiseList = parkingLocationsList.map((parking) => getParkingInfo(parking.id))
+
     const getParkingInfoList = async () => {
       const result = await Promise.all(promiseList)
       const parkingInfoList = parkingLocationsList.map((parkingLocation) => {
@@ -79,6 +85,9 @@ const NavigationMap = () => {
       }) as ParkingInfo[]
 
       setParkingList(parkingInfoList)
+      if (!nearParkingInfo && parkingInfoList[0]) {
+        setNearParkingInfo(parkingInfoList[0])
+      }
 
       // setNearParkingInfo(getCheapParkingInfo(parkingInfoList)!)
     }
@@ -104,9 +113,18 @@ const NavigationMap = () => {
         {/* 目的地 */}
         {destination && (
           <Marker coordinate={destination}>
-            <Callout>
-              <Text>目的地</Text>
-            </Callout>
+            <View
+              style={{
+                width: 50,
+                height: 50,
+                position: 'relative',
+              }}>
+              <MarkerIcon
+                width='100%'
+                height='100%'
+                viewBox='-3.5 0 30 30'
+              />
+            </View>
           </Marker>
         )}
         {parkingList.length > 0 &&

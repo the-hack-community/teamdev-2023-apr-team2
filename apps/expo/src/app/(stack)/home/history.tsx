@@ -1,10 +1,11 @@
+import HistoryButton from '@Components/organisms/history-button'
+import { Stack } from 'expo-router'
 import { Text, View } from 'react-native'
-
-import HistoryButton from '../../conponents/organisms/history-button'
 
 const HistoryPage = () => {
   return (
     <View className='text-dark-teal bg-arctic flex h-full w-full flex-col justify-center px-8'>
+      <Stack.Screen options={{ title: 'History' }} />
       <Text className='text-dark-teal mb-8 text-3xl font-extrabold'>Route History</Text>
       <View className='text-dark-teal bg-orange h-96 w-60 rounded-3xl'>
         <Text>Navigation</Text>
@@ -16,7 +17,7 @@ const HistoryPage = () => {
       </View>
       <Text className='text-dark-teal mb-16 mt-2'>DISTANCE</Text>
       <View className='absolute bottom-10 left-4'>
-        <HistoryButton href='/' />
+        <HistoryButton href='/(stack)/home' />
       </View>
     </View>
   )

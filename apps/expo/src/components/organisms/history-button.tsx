@@ -40,7 +40,7 @@ const HistoryButton = ({ href }: { href: string }) => {
 
   const handlePress = useCallback(() => {
     setTimeout(() => {
-      router.push(href)
+      router.replace(href)
     }, duration + 200)
   }, [href, router])
 

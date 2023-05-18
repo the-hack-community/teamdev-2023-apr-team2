@@ -1,16 +1,18 @@
-import { API_BASE_URL } from '../const/const'
-import type { ParkingBaseInfo, ParkingLocation } from '../type/type'
+import { API_BASE_URL } from '@Const/const'
+import type { ParkingBaseInfo, ParkingLocation } from '@Type/type'
 
 export const getParkingListByLatLng = async ({
   minLat,
   maxLat,
   minLng,
   maxLng,
+  csrfToken,
 }: {
   minLat: number
   maxLat: number
   minLng: number
   maxLng: number
+  csrfToken: string
 }): Promise<ParkingLocation[]> => {
   const body = JSON.stringify({
     latitude: { min: minLat, max: maxLat },
@@ -18,7 +20,7 @@ export const getParkingListByLatLng = async ({
   })
   const response = await fetch(`${API_BASE_URL}/location`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-Csrf-Token': csrfToken },
     body,
   })
   if (!response.ok) throw new Error(response.statusText)

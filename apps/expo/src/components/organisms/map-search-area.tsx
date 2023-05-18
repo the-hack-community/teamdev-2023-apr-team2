@@ -1,3 +1,8 @@
+import ParkingIcon from '@Components/atoms/parking-icon'
+import SearchIcon from '@Components/atoms/search-icon'
+import { GOOGLE_MAP_API_KEY } from '@Const/const'
+import { traceRoute } from '@Lib/map-controll'
+import type { ParkingInfo } from '@Type/type'
 import { useRef, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import type {
@@ -7,12 +12,6 @@ import type {
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import type { LatLng } from 'react-native-maps'
 import type MapView from 'react-native-maps'
-
-import { GOOGLE_MAP_API_KEY } from '../../const/const'
-import { traceRoute } from '../../lib/map-controll'
-import type { ParkingInfo } from '../../type/type'
-import ParkingIcon from '../atoms/parking-icon'
-import SearchIcon from '../atoms/search-icon'
 
 const MapSearchArea = ({
   location,
@@ -49,8 +48,10 @@ const MapSearchArea = ({
       longitude: details?.geometry.location.lng || 0,
     }
     setDestination(position)
-    traceRoute({ location, destination, setShowDirections, mapRef })
-    void moveTo(position)
+    if (location && destination) {
+      traceRoute({ location, destination, setShowDirections, mapRef })
+      void moveTo(position)
+    }
   }
 
   if (!GOOGLE_MAP_API_KEY) return <></>
@@ -71,7 +72,6 @@ const MapSearchArea = ({
           styles={{
             container: {
               flex: 1,
-              maxWidth: '85%',
             },
             textInput: {
               backgroundColor: 'transparent',
@@ -101,7 +101,7 @@ const MapSearchArea = ({
           }}
           renderRightButton={() => (
             <TouchableOpacity // ルート検索ボタン
-              className='bg-orange mr-[-75px] mt-2 flex h-8 w-8 items-center justify-center rounded-full'
+              className='bg-orange mr-2 mt-2 flex h-8 w-8 items-center justify-center rounded-full'
               onPress={() => traceRoute({ location, destination, setShowDirections, mapRef })}>
               <SearchIcon />
             </TouchableOpacity>
