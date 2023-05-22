@@ -7,15 +7,16 @@ export const traceRoute = ({
   destination,
   setShowDirections,
   mapRef,
+  edgePaddingValue = 40,
 }: {
   location: LatLng | null
   destination: LatLng | null
   setShowDirections: (show: boolean) => void
   mapRef: React.RefObject<MapView>
+  edgePaddingValue?: number
 }) => {
-  const edgePaddingValue = 40
   const edgePadding = {
-    top: 200,
+    top: edgePaddingValue === 0 ? 0 : 200,
     right: edgePaddingValue,
     bottom: edgePaddingValue,
     left: edgePaddingValue,

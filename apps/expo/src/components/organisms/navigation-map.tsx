@@ -197,6 +197,7 @@ const NavigationMap = () => {
         mapRef={mapRef}
         location={location}
         nearParkingInfo={nearParkingInfo}
+        setNearParkingInfo={setNearParkingInfo}
       />
     </View>
   )

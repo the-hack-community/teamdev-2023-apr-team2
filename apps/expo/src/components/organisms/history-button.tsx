@@ -23,10 +23,11 @@ const HistoryButton = ({ href }: { href: string }) => {
   }))
 
   const duration = 700
+  const scaleUpSize = 1200
   const handleItemClick = useAnimatedGestureHandler(
     {
       onStart: () => {
-        scaleUpAnimation.value = withTiming(800, {
+        scaleUpAnimation.value = withTiming(scaleUpSize, {
           duration,
           // easing: Easing.bezier(0.25, 0.1, 0.25, 1),
         })
@@ -40,7 +41,8 @@ const HistoryButton = ({ href }: { href: string }) => {
 
   const handlePress = useCallback(() => {
     setTimeout(() => {
-      router.replace(href)
+      if (href === '/(stack)/home') router.back()
+      router.push(href)
     }, duration + 200)
   }, [href, router])
 
