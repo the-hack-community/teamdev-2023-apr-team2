@@ -8,10 +8,20 @@
     },
     "dev:android": {
       "persistent": true,
-      "cache": false
+      "cache": false,
+      "passThroughEnv": ["GOOGLE_MAP_API_KEY", "API_BASE_URL"]
+    },
+    "build:android": {
+      "persistent": false,
+      "cache": false,
+      "dotEnv": [".env.local", ".env"],
+      "passThroughEnv": ["GOOGLE_MAP_API_KEY"]
     },
     "dev:ios": {
       "persistent": true,
+      "cache": false
+    },
+    "expo:config": {
       "cache": false
     },
     "dev:db": {
@@ -20,7 +30,8 @@
     },
     "dev:server": {
       "persistent": true,
-      "cache": false
+      "cache": false,
+      "env": ["NGROK_AUTH_TOKEN"]
     },
     "dev:migrate": {
       "cache": false
@@ -60,6 +71,7 @@
     "FACEBOOK_CLIENT_ID",
     "API_BASE_URL",
     "API_DOMAIN",
-    "API_SECRET"
+    "API_SECRET",
+    "FIREBASE_KEYFILE_JSON"
   ]
 }
