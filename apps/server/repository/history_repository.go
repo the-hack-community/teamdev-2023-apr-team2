@@ -22,7 +22,7 @@ func NewHistoryRepository(db *gorm.DB) IHistoryRepository {
 }
 
 func (hr *historyRepository) GetAllHistory(history *[]model.History, userId uint) error {
-	if err := hr.db.Joins("User").Where("user_id=?", userId).Order("created_at").Find(history).Error; err != nil {
+	if err := hr.db.Joins("JOIN users ON users.id = histories.user_refer").Where("histories.user_refer = ?", userId).Order("created_at").Find(history).Error; err != nil {
 		return err
 	}
 	return nil

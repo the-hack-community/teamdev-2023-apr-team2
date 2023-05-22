@@ -18,6 +18,7 @@ type History struct {
 }
 
 type HistoryResponse struct {
+	ID            uint            `json:"id" gorm:"primaryKey"`
 	UserRefer     uint            `json:"user_refer" gorm:"not null"`
 	FromLatitude  decimal.Decimal `json:"from_latitude" gorm:"not null"`
 	FromLongitude decimal.Decimal `json:"from_longitude" gorm:"not null"`

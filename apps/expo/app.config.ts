@@ -5,9 +5,10 @@ type Config = {
 }
 
 const defineConfig = (): Omit<ExpoConfig, 'scheme'> & Config => ({
-  name: 'expo',
+  name: 'cilotta',
   slug: 'cilotta',
-  scheme: ['cilotta', 'fb629191368747614'],
+  originalFullName: '@zorro901/cilotta',
+  scheme: 'cilotta',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
@@ -31,6 +32,12 @@ const defineConfig = (): Omit<ExpoConfig, 'scheme'> & Config => ({
       backgroundColor: '#1F104A',
     },
     package: 'app.expo.cilotta',
+    config: {
+      googleMaps: {
+        apiKey: process.env.GOOGLE_MAP_API_KEY,
+      },
+    },
+    googleServicesFile: './google-services.json',
   },
   extra: {
     eas: {
@@ -42,7 +49,24 @@ const defineConfig = (): Omit<ExpoConfig, 'scheme'> & Config => ({
     FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
     API_BASE_URL: process.env.API_BASE_URL,
   },
-  plugins: ['./expo-plugins/with-modify-gradle.js'],
+  plugins: [
+    './expo-plugins/with-modify-gradle.js',
+    '@react-native-firebase/app',
+    '@react-native-firebase/perf',
+    '@react-native-firebase/crashlytics',
+    '@react-native-google-signin/google-signin',
+    [
+      'react-native-fbsdk-next',
+      {
+        appID: '629191368747614',
+        clientToken: '',
+        displayName: 'Cilotta',
+        scheme: 'fb629191368747614',
+        isAutoInitEnabled: true,
+      },
+    ],
+    '@notifee/react-native',
+  ],
 })
 
 export default defineConfig

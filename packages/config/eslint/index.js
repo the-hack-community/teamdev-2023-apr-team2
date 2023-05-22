@@ -80,6 +80,7 @@ const config = {
     ],
     'tailwindcss/no-custom-classname': 'error',
     'tailwindcss/classnames-order': ['error', { config: '../tailwind' }],
+    'react-hooks/exhaustive-deps': 'off',
   },
   overrides: [
     {

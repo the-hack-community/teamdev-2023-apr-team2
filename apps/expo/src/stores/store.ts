@@ -1,7 +1,7 @@
 import { registerInDevtools, Store } from 'pullstate'
 
 export const AuthStore = new Store({
-  isLoggedIn: true,
+  isLoggedIn: false,
   token: '',
   csrfToken: '',
 })

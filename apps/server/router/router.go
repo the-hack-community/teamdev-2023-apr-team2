@@ -4,6 +4,7 @@ import (
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"net/http"
 	"os"
 	"server/controller"
 )
@@ -24,16 +25,15 @@ func NewRouter(uc controller.IUserController, hc controller.IHistoryController, 
 		AllowCredentials: true,
 	}))
 
-	// TODO: フロント側の対応が完了後に有効化する
-	//// CSRFのミドルウェアを追加
-	//e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-	//	CookiePath:   "/",
-	//	CookieDomain: os.Getenv("API_DOMAIN"),
-	//	//CookieHTTPOnly: true,
-	//	CookieSameSite: http.SameSiteNoneMode,
-	//	//CookieSameSite: http.SameSiteDefaultMode, // ローカル環境で検証するために設定
-	//	//CookieMaxAge:   60,
-	//}))
+	// CSRFのミドルウェアを追加
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup:    "header:X-Csrf-Token",
+		CookiePath:     "/",
+		CookieHTTPOnly: true,
+		CookieSameSite: http.SameSiteNoneMode,
+		//CookieSameSite: http.SameSiteDefaultMode, // ローカル環境で検証するために設定
+		CookieMaxAge: 3600 * 24,
+	}))
 
 	e.POST("/signup", uc.SignUp)
 	e.POST("/login", uc.LogIn)

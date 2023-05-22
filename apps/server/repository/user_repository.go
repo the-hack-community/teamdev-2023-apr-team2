@@ -6,8 +6,7 @@ import (
 )
 
 type IUserRepository interface {
-	GetUserByGoogleId(user *model.User, id string) error
-	GetUserByFacebookId(user *model.User, id string) error
+	GetUserBySocialID(user *model.User, id string, provider string) error
 	CreateUser(user *model.User) error
 }
 
@@ -19,15 +18,18 @@ func NewUserRepository(db *gorm.DB) IUserRepository {
 	return &userRepository{db}
 }
 
-func (ur *userRepository) GetUserByGoogleId(user *model.User, id string) error {
-	if err := ur.db.Where("google_id=?", id).First(user).Error; err != nil {
-		return err
-	}
-	return nil
-}
-func (ur *userRepository) GetUserByFacebookId(user *model.User, id string) error {
-	if err := ur.db.Where("facebook_id=?", id).First(user).Error; err != nil {
-		return err
+func (ur *userRepository) GetUserBySocialID(user *model.User, socialID, provider string) error {
+	switch provider {
+	case "google":
+		if err := ur.db.Where("google_id = ?", socialID).First(user).Error; err != nil {
+			return err
+		}
+	case "facebook":
+		if err := ur.db.Where("facebook_id = ?", socialID).First(user).Error; err != nil {
+			return err
+		}
+	default:
+		return nil
 	}
 	return nil
 }

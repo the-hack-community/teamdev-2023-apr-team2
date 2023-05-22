@@ -23,13 +23,14 @@ func NewHistoryUseCase(hr repository.IHistoryRepository, hv validator.IHistoryVa
 }
 
 func (hu *historyUseCase) GetAllHistory(userId uint) ([]model.HistoryResponse, error) {
-	histories := []model.History{}
+	var histories []model.History
 	if err := hu.hr.GetAllHistory(&histories, userId); err != nil {
 		return nil, err
 	}
-	resHistory := []model.HistoryResponse{}
+	var resHistory []model.HistoryResponse
 	for _, v := range histories {
 		t := model.HistoryResponse{
+			ID:            v.ID,
 			UserRefer:     v.UserRefer,
 			FromLatitude:  v.FromLatitude,
 			FromLongitude: v.FromLongitude,
@@ -48,6 +49,7 @@ func (hu *historyUseCase) GetHistoryById(userId uint, historyId uint) (model.His
 		return model.HistoryResponse{}, err
 	}
 	resHistory := model.HistoryResponse{
+		ID:            history.ID,
 		UserRefer:     history.UserRefer,
 		FromLatitude:  history.FromLatitude,
 		FromLongitude: history.FromLongitude,
@@ -67,6 +69,7 @@ func (hu *historyUseCase) CreateHistory(history model.History) (model.HistoryRes
 		return model.HistoryResponse{}, err
 	}
 	resHistory := model.HistoryResponse{
+		ID:            history.ID,
 		UserRefer:     history.UserRefer,
 		FromLatitude:  history.FromLatitude,
 		FromLongitude: history.FromLongitude,

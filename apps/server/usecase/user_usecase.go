@@ -46,11 +46,18 @@ func (uu *userUseCase) Login(user model.User) (string, error) {
 	}
 	storedUser := model.User{}
 
-	if err := uu.ur.GetUserByGoogleId(&storedUser, user.GoogleID); err != nil {
-		return "", err
-	}
-	if err := uu.ur.GetUserByFacebookId(&storedUser, user.FacebookID); err != nil {
-		return "", err
+	if user.FacebookID != "" {
+		err := uu.ur.GetUserBySocialID(&storedUser, user.FacebookID, "facebook")
+		if err != nil {
+			return "", err
+		}
+	} else if user.GoogleID != "" {
+		err := uu.ur.GetUserBySocialID(&storedUser, user.GoogleID, "google")
+		if err != nil {
+			return "", err
+		}
+	} else {
+		return "", nil
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

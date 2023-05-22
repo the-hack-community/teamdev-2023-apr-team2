@@ -1,14 +1,13 @@
+import FavoriteIcon from '@Components/atoms/favorite-icon'
 import ParkingIcon from '@Components/atoms/parking-icon'
 import SearchIcon from '@Components/atoms/search-icon'
-import { GOOGLE_MAP_API_KEY } from '@Const/const'
+import { API_BASE_URL, GOOGLE_MAP_API_KEY } from '@Const/const'
 import { traceRoute } from '@Lib/map-controll'
+import { AuthStore } from '@Stores/store'
 import type { ParkingInfo } from '@Type/type'
 import { useRef, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
-import type {
-  GooglePlaceDetail,
-  GooglePlacesAutocompleteRef,
-} from 'react-native-google-places-autocomplete'
+import type { GooglePlacesAutocompleteRef } from 'react-native-google-places-autocomplete'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import type { LatLng } from 'react-native-maps'
 import type MapView from 'react-native-maps'
@@ -21,6 +20,7 @@ const MapSearchArea = ({
   setShowDirections,
   mapRef,
   nearParkingInfo,
+  setNearParkingInfo,
 }: {
   location: LatLng | null
   distance: number
@@ -29,29 +29,33 @@ const MapSearchArea = ({
   setShowDirections: (show: boolean) => void
   mapRef: React.RefObject<MapView>
   nearParkingInfo: ParkingInfo | null
+  setNearParkingInfo: React.Dispatch<React.SetStateAction<ParkingInfo | null>>
 }) => {
   const googlePlacesRef = useRef<GooglePlacesAutocompleteRef>(null)
   const [isInputFocused, setIsInputFocused] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
+  const { token, csrfToken } = AuthStore.useState((s) => s)
 
   const cleanDescription = (description: string) => description.split(' ').at(-1) ?? ''
 
-  const moveTo = async (position: LatLng) => {
-    const camera = await mapRef.current?.getCamera()
-    if (camera) {
-      camera.center = position
-      mapRef.current?.animateCamera(camera, { duration: 500 })
-    }
-  }
-  const onPlaceSelected = (details: GooglePlaceDetail | null) => {
-    const position = {
-      latitude: details?.geometry.location.lat || 0,
-      longitude: details?.geometry.location.lng || 0,
-    }
-    setDestination(position)
-    if (location && destination) {
-      traceRoute({ location, destination, setShowDirections, mapRef })
-      void moveTo(position)
-    }
+  const addFavorite = async () => {
+    const response = await fetch(`${API_BASE_URL}/history`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Csrf-Token': csrfToken,
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        from_latitude: location?.latitude ?? 0,
+        from_longitude: location?.longitude ?? 0,
+        to_latitude: destination?.latitude ?? 0,
+        to_longitude: destination?.longitude ?? 0,
+        parking_id: nearParkingInfo?.id ?? 0,
+      }),
+    })
+    if (!response.ok) return
+    setIsFavorite(true)
   }
 
   if (!GOOGLE_MAP_API_KEY) return <></>
@@ -85,9 +89,16 @@ const MapSearchArea = ({
           placeholder='目的地を検索'
           fetchDetails //座標の値を取得
           onPress={(data, details = null) => {
-            googlePlacesRef.current?.setAddressText(cleanDescription(data.description))
+            setNearParkingInfo(null)
+            const position = {
+              latitude: details?.geometry.location.lat || 0,
+              longitude: details?.geometry.location.lng || 0,
+            }
             setIsInputFocused(false)
-            onPlaceSelected(details)
+            setIsFavorite(false)
+            setDestination(position)
+            googlePlacesRef.current?.setAddressText(cleanDescription(data.description))
+            traceRoute({ location, destination: position, setShowDirections, mapRef })
           }}
           // disableScroll
           isRowScrollable={false}
@@ -109,9 +120,14 @@ const MapSearchArea = ({
           inbetweenCompo={
             nearParkingInfo != null && !isInputFocused ? (
               <>
-                <View className='absolute left-2 top-16 flex flex-row'>
-                  <ParkingIcon />
-                  <Text className='ml-2 text-lg text-black/80'>{nearParkingInfo.name}</Text>
+                <View className='absolute top-16 flex w-full flex-row justify-between px-2'>
+                  <View className='flex flex-row'>
+                    <ParkingIcon />
+                    <Text className='ml-2 text-lg text-black/80'>{nearParkingInfo.name}</Text>
+                  </View>
+                  <View onTouchStart={() => void addFavorite()}>
+                    <FavoriteIcon state={isFavorite} />
+                  </View>
                 </View>
                 {/* 各種情報表示 */}
                 {distance ? (
