@@ -21,7 +21,7 @@ const config = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'prettier',
   ],
-  plugins: ['tailwindcss', 'simple-import-sort', 'import'],
+  plugins: ['tailwindcss', 'simple-import-sort', 'import', 'trim'],
   settings: {
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
@@ -81,6 +81,7 @@ const config = {
     'tailwindcss/no-custom-classname': 'error',
     'tailwindcss/classnames-order': ['error', { config: '../tailwind' }],
     'react-hooks/exhaustive-deps': 'off',
+    'trim/class-name': 'error',
   },
   overrides: [
     {
