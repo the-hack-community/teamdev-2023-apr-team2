@@ -31,13 +31,17 @@ const HistoryPage = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         className='flex max-h-96'>
-        {histories.map((history) => (
-          <View
-            key={history.id}
-            className='text-dark-teal bg-orange mr-4 h-96 w-60 overflow-hidden rounded-3xl'>
-            <HistoryMap history={history} />
-          </View>
-        ))}
+        {histories ? (
+          histories.map((history) => (
+            <View
+              key={history.id}
+              className='text-dark-teal bg-orange mr-4 h-96 w-60 overflow-hidden rounded-3xl'>
+              <HistoryMap history={history} />
+            </View>
+          ))
+        ) : (
+          <View className='h-96'></View>
+        )}
       </ScrollView>
       <Text className='text-dark-teal my-4 text-2xl font-medium'>Tokyo Sky tree</Text>
       <View className='flex flex-row items-baseline'>

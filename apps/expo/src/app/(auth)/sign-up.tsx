@@ -91,33 +91,33 @@ const SignUp = () => {
   }
 
   return (
-    <SafeAreaView className='flex h-full w-full flex-1 flex-col items-center justify-center'>
+    <SafeAreaView className='flex h-full w-full flex-col items-center justify-center'>
       <View className='gap-4'>
         <View
-          className='flex flex-row'
+          className='my-1 flex flex-row items-center justify-center'
           onTouchStart={() => void googleSignUp()}>
           <MaterialCommunityIcons
             name='google'
             size={24}
             color='black'
           />
-          <Text className='ml-2'>Sign up with Google</Text>
+          <Text className='ml-2 w-40'>Sign up with Google</Text>
         </View>
         <View
-          className='flex flex-row'
+          className='my-1 flex flex-row items-center justify-center'
           onTouchStart={() => void facebookSignUp()}>
           <MaterialCommunityIcons
             name='facebook'
             size={24}
             color='black'
           />
-          <Text className='ml-2'>Sign up with Facebook</Text>
+          <Text className='ml-2 w-40'>Sign up with Facebook</Text>
         </View>
         <View>
           <View
-            className='w-40 rounded-lg bg-gray-200'
+            className='rounded-lg bg-gray-200'
             onTouchStart={() => router.replace('/login')}>
-            <Text className='m-auto'>Login</Text>
+            <Text className='text-center'>Login</Text>
           </View>
         </View>
       </View>

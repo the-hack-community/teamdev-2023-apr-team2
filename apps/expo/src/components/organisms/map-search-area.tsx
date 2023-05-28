@@ -123,7 +123,11 @@ const MapSearchArea = ({
                 <View className='absolute top-16 flex w-full flex-row justify-between px-2'>
                   <View className='flex flex-row'>
                     <ParkingIcon />
-                    <Text className='ml-2 text-lg text-black/80'>{nearParkingInfo.name}</Text>
+                    <Text className='ml-2 min-w-[220px] text-lg text-black/80'>
+                      {nearParkingInfo.name.length > 16
+                        ? `${nearParkingInfo.name.slice(0, 16)}...`
+                        : nearParkingInfo.name}
+                    </Text>
                   </View>
                   <View onTouchStart={() => void addFavorite()}>
                     <FavoriteIcon state={isFavorite} />
