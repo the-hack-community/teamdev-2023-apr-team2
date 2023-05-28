@@ -8,14 +8,11 @@
     },
     "dev:android": {
       "persistent": true,
-      "cache": false,
-      "passThroughEnv": ["GOOGLE_MAP_API_KEY", "API_BASE_URL"]
+      "cache": false
     },
     "build:android": {
       "persistent": false,
-      "cache": false,
-      "dotEnv": [".env.local", ".env"],
-      "passThroughEnv": ["GOOGLE_MAP_API_KEY"]
+      "cache": false
     },
     "dev:ios": {
       "persistent": true,
@@ -69,6 +66,7 @@
     "GOOGLE_WEB_CLIENT_ID",
     "GOOGLE_ANDROID_CLIENT_ID",
     "FACEBOOK_CLIENT_ID",
+    "FACEBOOK_CLIENT_TOKEN",
     "API_BASE_URL",
     "API_DOMAIN",
     "API_SECRET",

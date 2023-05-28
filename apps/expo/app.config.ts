@@ -59,7 +59,7 @@ const defineConfig = (): Omit<ExpoConfig, 'scheme'> & Config => ({
       'react-native-fbsdk-next',
       {
         appID: '629191368747614',
-        clientToken: '',
+        clientToken: process.env.FACEBOOK_CLIENT_TOKEN,
         displayName: 'Cilotta',
         scheme: 'fb629191368747614',
         isAutoInitEnabled: true,

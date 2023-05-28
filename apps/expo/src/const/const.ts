@@ -1,9 +1,20 @@
+import Constants from 'expo-constants'
 import { Dimensions } from 'react-native'
 import type { MapStyleElement } from 'react-native-maps'
 
-export const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY
-export const GOOGLE_WEB_CLIENT_ID = process.env.GOOGLE_WEB_CLIENT_ID
-export const API_BASE_URL = process.env.API_BASE_URL
+interface ExpoConfig {
+  extra?: {
+    API_BASE_URL?: string
+    GOOGLE_MAP_API_KEY?: string
+    GOOGLE_WEB_CLIENT_ID?: string
+  }
+}
+
+const expoConfig: ExpoConfig = Constants.expoConfig || {}
+
+export const GOOGLE_MAP_API_KEY = expoConfig.extra?.GOOGLE_MAP_API_KEY ?? ''
+export const GOOGLE_WEB_CLIENT_ID = expoConfig.extra?.GOOGLE_WEB_CLIENT_ID ?? ''
+export const API_BASE_URL = expoConfig.extra?.API_BASE_URL ?? ''
 
 export const mapStyle: MapStyleElement[] = [
   {
