@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"os"
 	"server/controller"
 	"server/db"
 	"server/repository"
@@ -55,11 +56,13 @@ func main() {
 		}
 	}()
 
-	go func() {
-		if err := runNgrokServer(context.Background(), "localhost:1323"); err != nil {
-			log.Fatal(err)
-		}
-	}()
+	if os.Getenv("GO_ENV") != "production" {
+		go func() {
+			if err := runNgrokServer(context.Background(), "localhost:1323"); err != nil {
+				log.Fatal(err)
+			}
+		}()
+	}
 
 	select {}
 }

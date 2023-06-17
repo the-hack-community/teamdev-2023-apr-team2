@@ -30,6 +30,11 @@
       "cache": false,
       "env": ["NGROK_AUTH_TOKEN"]
     },
+    "prod:server": {
+      "persistent": true,
+      "cache": false,
+      "env": ["GO_ENV"]
+    },
     "dev:migrate": {
       "cache": false
     },
